@@ -17,13 +17,14 @@ export class AbstractionService {
 
         try {
             const response = await this.openai.chat.completions.create({
-                model: "gpt-4o-mini",
+                model: "gpt-5.4-mini",
+                temperature: 0,
                 messages: [
                     { role: "system", content: prompt },
                     { role: "user", content: `Input: "${data.response}"` }
                 ],
                 response_format: { type: "json_object" },
-                max_tokens: 50,
+                max_completion_tokens: 150,
             });
 
             const content = response.choices[0].message.content;
@@ -37,14 +38,15 @@ export class AbstractionService {
     }
 
     private getPrompt(taskId: AbstractionTaskId): string {
-        // Highly optimized prompt for token efficiency
+        // Prompt con tolerancia clínica: acepta sinónimos y respuestas en español/inglés
         return `
-Rol: MoCA Judge. STRICT. 
+Rol: MoCA Judge. Criterio clínico razonable (ni muy laxo ni muy estricto). Responde en el idioma del input si aplica.
 Task: '${taskId}'.
-Criteria:
-- ABSTRACTION_TRAIN (Train-Bicycle): Req "Transport"/"Vehicle"/"Travel". (Concrete e.g. "Wheels"=0).
-- ABSTRACTION_WATCH (Watch-Ruler): Req "Measuring"/"Measure". (Concrete e.g. "Numbers"=0).
-Output JSON: { "score": 0|1, "notes": "max 5 words" }
+Criteria (acepta la idea aunque no use la palabra exacta; evalúa la CATEGORÍA de la respuesta, no el término literal):
+- ABSTRACTION_TRAIN (Tren-Bicicleta): Score=1 si la respuesta captura la categoría "medio/forma de transporte" o "viajar/trasladarse" (ej: "transporte", "vehículos", "formas de viajar", "medios para moverse", "transportation", "ways to travel"). Score=0 SOLO si la respuesta es puramente concreta/perceptual sin noción de categoría (ej: "ambos tienen ruedas", "son de metal").
+- ABSTRACTION_WATCH (Reloj-Regla): Score=1 si la respuesta captura la categoría "instrumentos de medición" (ej: "miden cosas", "sirven para medir", "instrumentos de medida", "measuring tools"). Score=0 SOLO si es puramente concreto sin noción de medir (ej: "tienen números", "son de metal").
+Ante duda razonable, si la respuesta se acerca a la categoría correcta aunque esté mal redactada o incompleta, otorga el punto.
+Output JSON: { "score": 0|1, "notes": "max 8 words" }
 `.trim();
     }
 }

@@ -15,28 +15,37 @@ export default function LandingPage() {
                 <section className="relative bg-gradient-to-br from-brand-50 to-white overflow-hidden">
                     <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
-                        <div className="text-center max-w-3xl mx-auto">
-                            <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold text-brand-700 bg-brand-50 border border-brand-100 mb-6">
-                                <span>Plataforma Clínica Segura</span>
+                        <div className="grid lg:grid-cols-2 gap-12 items-center">
+                            <div className="text-center lg:text-left">
+                                <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold text-brand-700 bg-brand-50 border border-brand-100 mb-6">
+                                    <span>Plataforma Clínica Segura</span>
+                                </div>
+                                <h1 className="text-4xl md:text-6xl font-bold text-slate-900 tracking-tight mb-6">
+                                    Evaluación Cognitiva MoCA <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">Digital y Profesional</span>
+                                </h1>
+                                <p className="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
+                                    La herramienta estándar para la detección de deterioro cognitivo, ahora digitalizada para una aplicación precisa, segura y accesible.
+                                </p>
+                                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                                    <Button href="/tests/demo/visuospatial" size="lg" className="w-full sm:w-auto shadow-lg shadow-brand-500/20">
+                                        Iniciar Evaluación
+                                    </Button>
+                                    <Button href={user ? "/dashboard" : "/login"} variant="secondary" size="lg" className="w-full sm:w-auto">
+                                        Acceso Profesional
+                                    </Button>
+                                </div>
+                                <p className="mt-6 text-sm text-slate-500">
+                                    * Datos encriptados y confidenciales. Cumplimiento con estándares de salud.
+                                </p>
                             </div>
-                            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 tracking-tight mb-6">
-                                Evaluación Cognitiva MoCA <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">Digital y Profesional</span>
-                            </h1>
-                            <p className="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
-                                La herramienta estándar para la detección de deterioro cognitivo, ahora digitalizada para una aplicación precisa, segura y accesible.
-                            </p>
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <Button href="/tests/demo/visuospatial" size="lg" className="w-full sm:w-auto shadow-lg shadow-brand-500/20">
-                                    Iniciar Evaluación
-                                </Button>
-                                <Button href={user ? "/dashboard" : "/login"} variant="secondary" size="lg" className="w-full sm:w-auto">
-                                    Acceso Profesional
-                                </Button>
+                            <div className="hidden lg:block">
+                                <img
+                                    src="/hero.png"
+                                    alt="Ilustración de evaluación cognitiva digital con inteligencia artificial"
+                                    className="w-full h-auto"
+                                />
                             </div>
-                            <p className="mt-6 text-sm text-slate-500">
-                                * Datos encriptados y confidenciales. Cumplimiento con estándares de salud.
-                            </p>
                         </div>
                     </div>
                 </section>
