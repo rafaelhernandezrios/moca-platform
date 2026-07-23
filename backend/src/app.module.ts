@@ -15,6 +15,7 @@ import { OrientationModule } from './orientation/orientation.module';
 import { AttentionModule } from './attention/attention.module';
 import { LanguageModule } from './language/language.module';
 import { TranscribeModule } from './transcribe/transcribe.module';
+import { TtsModule } from './tts/tts.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { TranscribeModule } from './transcribe/transcribe.module';
     OrientationModule,
     AttentionModule,
     LanguageModule,
-    TranscribeModule
+    TranscribeModule,
+    TtsModule
   ],
   controllers: [AppController],
   providers: [AppService],

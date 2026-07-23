@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { VoiceRecorder, TranscriptBox } from '../components/ui/VoiceRecorder';
+import { useTTS } from '../hooks/useTTS';
 import type { MemoryWord } from '@moca/shared';
 
 const WORDS: MemoryWord[] = ['ROSTRO', 'SEDA', 'IGLESIA', 'CLAVEL', 'ROJO'];
@@ -21,18 +22,12 @@ export default function MemoryTest() {
         setTranscript((prev) => (prev ? `${prev} ${text}` : text));
     };
 
-    const readWords = () => {
-        if (!('speechSynthesis' in window)) {
-            alert("Tu navegador no soporta texto a voz.");
-            return;
-        }
+    const { speak } = useTTS();
 
+    const readWords = async () => {
         setIsReading(true);
-        const utterance = new SpeechSynthesisUtterance(WORDS.join('. ')); // Pause between words
-        utterance.lang = 'es-ES';
-        utterance.rate = 0.8; // Slower pace
-        utterance.onend = () => setIsReading(false);
-        window.speechSynthesis.speak(utterance);
+        await speak(WORDS.join('. ')); // Pausa entre palabras
+        setIsReading(false);
     };
 
     const handleNextTrial = () => {

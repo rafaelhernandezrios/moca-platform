@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { VoiceRecorder, TranscriptBox } from '../components/ui/VoiceRecorder';
+import { useTTS } from '../hooks/useTTS';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -27,6 +28,8 @@ export default function AttentionTest() {
 
     const [testResults, setTestResults] = useState<any>({});
 
+    const { speak } = useTTS();
+
     // Acumula el texto transcrito por Whisper (no borra lo anterior).
     const appendTranscript = (text: string) => {
         setTranscript((prev) => (prev ? `${prev} ${text}` : text));
@@ -34,6 +37,15 @@ export default function AttentionTest() {
 
     // --- Actions ---
 
+    // Series numéricas: una sola locución natural en español (ElevenLabs).
+    const playDigits = async (sequence: string[]) => {
+        setIsReading(true);
+        await speak(sequence.join(', '));
+        setIsReading(false);
+    };
+
+    // La detección de letras SÍ usa la voz del navegador letra a letra, porque necesita
+    // saber qué letra suena en cada momento para validar los toques (sincronía por letra).
     const readSequence = (sequence: string[], rate = 0.8, onChar?: (char: string, index: number) => void) => {
         if (!('speechSynthesis' in window)) return;
         setIsReading(true);
@@ -147,7 +159,7 @@ export default function AttentionTest() {
                             <p className="text-blue-800 bg-blue-50 p-4 rounded-lg">"Voy a decirle algunos números. Escuche atentamente y cuando yo termine, repítalos exactamente como yo los dije."</p>
 
                             <div className="flex flex-col items-center gap-4">
-                                <Button onClick={() => readSequence(DIGITS_FORWARD)} disabled={isReading}>
+                                <Button onClick={() => playDigits(DIGITS_FORWARD)} disabled={isReading}>
                                     {isReading ? '🔊 Leyendo...' : '▶️ Reproducir Serie'}
                                 </Button>
                                 <VoiceRecorder onResult={appendTranscript} idleLabel="🎙️ Responder" />
@@ -166,7 +178,7 @@ export default function AttentionTest() {
                             <p className="text-blue-800 bg-blue-50 p-4 rounded-lg">"Ahora voy a decirle otros números, pero cuando yo termine, repítalos AL REVÉS (hacia atrás)."</p>
 
                             <div className="flex flex-col items-center gap-4">
-                                <Button onClick={() => readSequence(DIGITS_BACKWARD)} disabled={isReading}>
+                                <Button onClick={() => playDigits(DIGITS_BACKWARD)} disabled={isReading}>
                                     {isReading ? '🔊 Leyendo...' : '▶️ Reproducir Serie'}
                                 </Button>
                                 <VoiceRecorder onResult={appendTranscript} idleLabel="🎙️ Responder" />

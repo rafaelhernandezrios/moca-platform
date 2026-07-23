@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { VoiceRecorder, TranscriptBox } from '../components/ui/VoiceRecorder';
+import { useTTS } from '../hooks/useTTS';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -44,14 +45,12 @@ export default function LanguageTest() {
 
     // --- Actions ---
 
-    const readText = (text: string, rate = 0.9) => {
-        if (!('speechSynthesis' in window)) return;
+    const { speak } = useTTS();
+
+    const readText = async (text: string) => {
         setIsReading(true);
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'es-ES';
-        utterance.rate = rate;
-        utterance.onend = () => setIsReading(false);
-        window.speechSynthesis.speak(utterance);
+        await speak(text);
+        setIsReading(false);
     };
 
     // --- Navigation ---
