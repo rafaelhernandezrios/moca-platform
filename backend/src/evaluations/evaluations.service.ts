@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 import { Evaluation, EvaluationDocument } from './schemas/evaluation.schema';
 import { PatientsService } from '../patients/patients.service';
 
@@ -25,7 +25,7 @@ export class EvaluationsService {
 
   async create(professionalId: string, patientId: string): Promise<{ testId: string; evaluationId: string }> {
     await this.patientsService.findOne(patientId, professionalId);
-    const testId = uuidv4();
+    const testId = randomUUID();
     const evalDoc = await this.evaluationModel.create({
       testId,
       patientId,

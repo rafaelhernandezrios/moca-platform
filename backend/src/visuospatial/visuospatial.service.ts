@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, InternalServerErrorException } from '@ne
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { VisuospatialSubmissionDTO, VisuospatialEvalResultDTO, VisuospatialTaskId } from '@moca/shared';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class VisuospatialService {
@@ -18,7 +18,7 @@ export class VisuospatialService {
     }
 
     async saveSubmission(submission: VisuospatialSubmissionDTO): Promise<{ submissionId: string }> {
-        const id = uuidv4();
+        const id = randomUUID();
         // In a real app, save to DB
         this.submissions.set(id, submission);
         return { submissionId: id };
