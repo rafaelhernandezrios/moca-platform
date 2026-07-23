@@ -29,8 +29,13 @@ export class VisuospatialService {
         if (!submission) {
             throw new NotFoundException(`Submission ${submissionId} not found`);
         }
+        return this.evaluateImage(submission.taskId, submission.imageBase64);
+    }
 
-        const systemPrompt = this.getSystemPrompt(submission.taskId);
+    // Evalúa directamente a partir de la imagen (sin estado en memoria). Necesario para
+    // entornos serverless donde /submissions y /evaluate pueden atender instancias distintas.
+    async evaluateImage(taskId: VisuospatialTaskId, imageBase64: string): Promise<VisuospatialEvalResultDTO> {
+        const systemPrompt = this.getSystemPrompt(taskId);
 
         try {
             const response = await this.openai.chat.completions.create({
@@ -44,11 +49,11 @@ export class VisuospatialService {
                     {
                         role: "user",
                         content: [
-                            { type: "text", text: `Tarea: ${submission.taskId}` },
+                            { type: "text", text: `Tarea: ${taskId}` },
                             {
                                 type: "image_url",
                                 image_url: {
-                                    url: submission.imageBase64,
+                                    url: imageBase64,
                                 }
                             }
                         ]

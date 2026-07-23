@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiClient } from '../../lib/api';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -22,7 +22,7 @@ export default function StudyForm() {
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const [draggedItem, setDraggedItem] = useState<{ type: 'pool' | 'sequence'; index?: number; value?: string } | null>(null);
+  const [, setDraggedItem] = useState<{ type: 'pool' | 'sequence'; index?: number; value?: string } | null>(null);
 
   useEffect(() => {
     if (studyId) {

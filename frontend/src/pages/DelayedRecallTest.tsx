@@ -18,7 +18,7 @@ const CUES: Record<string, { category: string; choices: string[] }> = {
 const DelayedRecallTest: React.FC = () => {
     const { testId } = useParams<{ testId: string }>();
     const navigate = useNavigate();
-    const { speak, isSpeaking } = useTTS();
+    const { speak } = useTTS();
 
     // Steps: 
     // 0: Instruction "Tell me words"
@@ -79,7 +79,7 @@ const DelayedRecallTest: React.FC = () => {
         }
     };
 
-    const handleChoiceResponse = (choice: string) => {
+    const handleChoiceResponse = (_choice: string) => {
         // RECORD CHOICE? (for clinical notes, strictly MoCA score is 0 if it reached here usually, but we save data)
         nextMissedWord();
     };

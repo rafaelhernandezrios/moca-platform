@@ -58,15 +58,9 @@ export default function VisuospatialTest() {
         setIsSubmitting(true);
 
         try {
-            const submitResponse = await axios.post(`${API_URL}/tests/${testId}/visuospatial/${currentStep.id}/submissions`, {
+            // Una sola llamada (envía y evalúa) — sin estado en memoria, compatible con serverless.
+            const evalResponse = await axios.post(`${API_URL}/tests/${testId}/visuospatial/${currentStep.id}/submit-and-evaluate`, {
                 imageBase64: base64,
-                metadata: { timestamp: Date.now(), deviceType: 'web' }
-            });
-
-            const { submissionId } = submitResponse.data;
-
-            const evalResponse = await axios.post(`${API_URL}/tests/${testId}/visuospatial/${currentStep.id}/evaluate`, {
-                submissionId
             });
 
             const score = Number(evalResponse.data?.score) || 0;

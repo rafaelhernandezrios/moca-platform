@@ -182,8 +182,6 @@ export default function PatientDetail() {
   if (loading) return <div className="text-slate-600">Cargando...</div>;
   if (error || !patient) return <div className="text-red-600">{error || 'Paciente no encontrado'}</div>;
 
-  const completed = evaluations.filter((e) => e.status === 'completed');
-
   return (
     <div className="space-y-6">
       <Breadcrumbs

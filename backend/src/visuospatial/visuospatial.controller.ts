@@ -29,4 +29,15 @@ export class VisuospatialController {
     ) {
         return this.visuospatialService.evaluateSubmission(body.submissionId);
     }
+
+    // Envía la imagen y la evalúa en una sola llamada (sin estado en memoria).
+    // Preferido en producción/serverless.
+    @Post(':taskId/submit-and-evaluate')
+    async submitAndEvaluate(
+        @Param('testId') testId: string,
+        @Param('taskId') taskId: string,
+        @Body() body: { imageBase64: string },
+    ) {
+        return this.visuospatialService.evaluateImage(taskId as VisuospatialTaskId, body.imageBase64);
+    }
 }
